@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+ 
+  <meta name="theme-color" content="#536878">
+  <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="bootstrap-grid.min.css">  
+
+  <title>On TV tonight..</title>
+  <style type="text/css">
+  
+    body {
+      background-color: #9b59b6 !important;
+      font-family: sans-serif;
+    }
+    a{
+      text-decoration: none;
+      color: #E0CDCD;
+    }
+
+    h1,
+    h3 {
+      display: flex;
+      justify-content: center;
+      color: #E0CDCD !important;
+    }
+
+    .navbar,
+    .footer {
+      background-color: #8e44ad;
+    }
+  
+  </style>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+
+  <div id="root">
+    <!--for first meaningful paint -->
+    <div class="navbar">
+      <h1>TV SCHEDULE</h1>
+    </div>
+    <h1>On TV tonight</h1>
+    <div class="footer">
+      <h3>
+        created using <a href="https://www.tvmaze.com/">  TVMaze API </a>
+      </h3>
+    </div>
+  </div>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          // registration failed 
+          console.log('ServiceWorker registration failed: ', err);
+        }).catch(function (err) {
+          console.log(err)
+        });
+      });
+    } else {
+      console.log('service worker is not supported');
+    }
+    //for web notification
+    Notification.requestPermission(function(status) {
+    console.log('Notification permission status:', status);
+});
+//notification
+function displayNotification() {
+  if (Notification.permission == 'granted') {
+    navigator.serviceWorker.getRegistration().then(function(reg) {
+      var options = {
+        body: 'Here is a notification body!',
+        icon: 'favicon.ico',
+        vibrate: [100, 50, 100],
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: 1
+        },
+        actions: [
+          {action: 'explore', title: 'Explore this new world'},
+          {action: 'close', title: 'Close notification'},
+        ]
+      };
+      reg.showNotification('Hello world!', options);
+    });
+  }
+}
+  </script>
+</body>
+
+</html>
